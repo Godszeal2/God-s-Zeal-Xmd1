@@ -1,0 +1,28 @@
+name: Godszeal Xmd
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: Ping
+        run: curl -s https://google.com > /dev/null
+      - name: Start Bot
+        run: npm start
+        env:
+          SESSION_ID: ${{ secrets.SESSION_ID }}
+          PREFIX: ${{ secrets.PREFIX }}
